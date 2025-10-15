@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -94,7 +94,7 @@
     }
   </style>
 
-  <!-- Firebase SDK -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
 </head>
@@ -104,23 +104,25 @@
   <button id="new-memo-btn">+</button>
 
   <script>
-    // 1. Firebase 설정
+    // Firebase 설정
     const firebaseConfig = {
       apiKey: "AIzaSyBCEHZSZe2wpeHc6WctUcjyUuNS8p3fxqI",
       authDomain: "hwidao-5f9de.firebaseapp.com",
+      databaseURL: "https://hwidao-5f9de-default-rtdb.firebaseio.com",
       projectId: "hwidao-5f9de",
       storageBucket: "hwidao-5f9de.appspot.com",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      messagingSenderId: "372324706194",
+      appId: "1:372324706194:web:240e639ea9df95a887c34b"
     };
 
+    // Firebase 초기화 및 Firestore 가져오기
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
     const container = document.getElementById("memo-container");
     const newMemoBtn = document.getElementById("new-memo-btn");
 
-    // 2. Firestore에서 메모 불러오기
+    // Firestore에서 메모 불러오기
     async function loadMemos() {
       const snapshot = await db.collection("memos").get();
       snapshot.forEach(doc => {
@@ -128,7 +130,7 @@
       });
     }
 
-    // 3. 메모 저장 (Firestore에)
+    // 메모 저장
     async function saveMemo(id, text) {
       if (id) {
         await db.collection("memos").doc(id).set({ text });
@@ -138,13 +140,13 @@
       }
     }
 
-    // 4. 메모 삭제
+    // 메모 삭제
     async function deleteMemo(id, element) {
       await db.collection("memos").doc(id).delete();
       container.removeChild(element);
     }
 
-    // 5. 메모 추가 UI
+    // 메모 UI 생성
     function addMemo(text = "", id = null) {
       const memo = document.createElement("div");
       memo.className = "memo";
@@ -158,7 +160,7 @@
       delBtn.className = "delete-btn";
       delBtn.onclick = () => {
         if (id) deleteMemo(id, memo);
-        else container.removeChild(memo); // 아직 저장 안 됐을 경우
+        else container.removeChild(memo);
       };
 
       const saveBtn = document.createElement("button");
@@ -178,10 +180,10 @@
       container.appendChild(memo);
     }
 
-    // 6. 새 메모 버튼
+    // 새 메모 추가
     newMemoBtn.onclick = () => addMemo();
 
-    // 7. 페이지 로드시 메모 불러오기
+    // 페이지 로드시 메모 불러오기
     loadMemos();
   </script>
 </body>
